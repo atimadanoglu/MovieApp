@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -18,6 +20,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val apiKeyPropertiesFile = rootProject.file("local.properties")
+        val apiKeyProperties = Properties()
+        apiKeyProperties.load(apiKeyPropertiesFile.inputStream())
+
+        buildConfigField("String", "API_KEY", apiKeyProperties.getProperty("API_KEY"))
     }
 
     buildTypes {
@@ -32,15 +40,16 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -48,6 +57,8 @@ dependencies {
     val room_version = "2.5.2"
     val paging_version = "3.2.0"
     val hilt_version = "2.44.2"
+    val retrofit_version = "2.9.0"
+    val okhttp_version = "4.10.0"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -73,6 +84,15 @@ dependencies {
 
     // Paging3
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    // Gson Converter (For Gson JSON parsing)
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    // OkHttp (Retrofit's recommended HTTP client)
+    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    // OkHttp Logging Interceptor (For logging network requests and responses)
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
 }
 
 kapt {
