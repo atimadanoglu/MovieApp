@@ -7,14 +7,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieService {
-    @GET("/search/movie")
+    @GET("search/movie")
     suspend fun getMoviesByQuery(
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean = false,
-        @Query("language") language: String = "en-US"
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int
     ): MoviesDto
 
-    @GET("/movie/{movie_id}")
+    @GET("movie/{movie_id}")
     suspend fun getMovieDetailsById(
         @Path("movie_id") id: Int,
         @Query("include_adult") includeAdult: Boolean = false,
