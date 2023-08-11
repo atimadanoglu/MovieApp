@@ -1,6 +1,7 @@
 package com.atakanmadanoglu.movieapp.di
 
 import com.atakanmadanoglu.movieapp.BuildConfig
+import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,8 +15,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "https://api.themoviedb.org/3"
-    private val AUTHORIZATION_HEADER = "Bearer ${BuildConfig.API_KEY}"
+    private const val BASE_URL = "https://api.themoviedb.org/3/"
+    private const val AUTHORIZATION_HEADER = "Bearer ${BuildConfig.API_KEY}"
     private const val ACCEPT_HEADER = "application/json"
     @Provides
     @Singleton
@@ -37,4 +38,10 @@ object NetworkModule {
                 .build()
             chain.proceed(request)
         }.build()
+
+    @Provides
+    @Singleton
+    fun getMovieService(
+        retrofit: Retrofit
+    ): MovieService = retrofit.create(MovieService::class.java)
 }

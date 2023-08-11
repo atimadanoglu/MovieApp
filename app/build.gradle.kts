@@ -54,11 +54,12 @@ android {
 }
 
 dependencies {
-    val room_version = "2.5.2"
-    val paging_version = "3.2.0"
-    val hilt_version = "2.44.2"
-    val retrofit_version = "2.9.0"
-    val okhttp_version = "4.10.0"
+    val roomVersion = "2.5.2"
+    val pagingVersion = "3.2.0"
+    val hiltVersion = "2.44.2"
+    val retrofitVersion = "2.9.0"
+    val okhttpVersion = "4.10.0"
+    val activityVersion = "1.7.2"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -69,30 +70,44 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:$hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Room
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
     // To use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$roomVersion")
     // Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.room:room-ktx:$roomVersion")
     // Paging 3 Integration
-    implementation("androidx.room:room-paging:$room_version")
+    implementation("androidx.room:room-paging:$roomVersion")
 
     // Paging3
-    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     // Gson Converter (For Gson JSON parsing)
-    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     // OkHttp (Retrofit's recommended HTTP client)
-    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     // OkHttp Logging Interceptor (For logging network requests and responses)
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
+
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation( "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+
+    // Kotlin
+    implementation("androidx.activity:activity-ktx:$activityVersion")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
 }
 
 kapt {
