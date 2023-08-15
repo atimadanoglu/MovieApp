@@ -11,8 +11,8 @@ interface MovieDao {
     @Upsert
     suspend fun upsertMovies(movies: List<MovieEntity>)
 
-    @Query("SELECT * FROM movie")
-    fun getMovies(): PagingSource<Int, MovieEntity>
+    @Query("SELECT * FROM movie WHERE `query` = :query")
+    fun getMoviesByQuery(query: String): PagingSource<Int, MovieEntity>
 
     @Query("DELETE FROM movie")
     suspend fun deleteAll()

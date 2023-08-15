@@ -54,5 +54,4 @@ class MovieItemDiffUtil: DiffUtil.ItemCallback<MovieUI>() {
     override fun areContentsTheSame(oldItem: MovieUI, newItem: MovieUI): Boolean {
         return oldItem == newItem
     }
-
 }

@@ -4,9 +4,10 @@ import com.atakanmadanoglu.movieapp.data.service.local.entity.MovieEntity
 import com.atakanmadanoglu.movieapp.data.service.remote.dto.MovieDto
 import javax.inject.Inject
 
-class MovieDtoToEntityMapper @Inject constructor() {
+class MovieEntityMapper @Inject constructor() {
     private fun mapToMovieEntity(
-        movieDto: MovieDto
+        movieDto: MovieDto,
+        query: String
     ): MovieEntity = with(movieDto) {
         MovieEntity(
             adult = adult,
@@ -17,13 +18,15 @@ class MovieDtoToEntityMapper @Inject constructor() {
             popularity = popularity,
             posterPath = poster_path ?:"",
             releaseDate = release_date,
-            title = title
+            title = title,
+            query = query
         )
     }
 
     fun mapToMovieEntityList(
-        movieDtoList: List<MovieDto>
+        movieDtoList: List<MovieDto>,
+        query: String
     ): List<MovieEntity> = movieDtoList.map {
-        mapToMovieEntity(it)
+        mapToMovieEntity(it, query)
     }
 }
