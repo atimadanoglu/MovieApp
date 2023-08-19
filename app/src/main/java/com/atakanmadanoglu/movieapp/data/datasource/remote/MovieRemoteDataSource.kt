@@ -1,9 +1,8 @@
 package com.atakanmadanoglu.movieapp.data.datasource.remote
 
 import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
-import javax.inject.Inject
 
-class MovieRemoteDataSource @Inject constructor(
+class MovieRemoteDataSource(
     private val service: MovieService
 ) {
     /*fun getMoviesByQuery(

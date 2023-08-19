@@ -2,9 +2,8 @@ package com.atakanmadanoglu.movieapp.data.mapper
 
 import com.atakanmadanoglu.movieapp.data.service.local.entity.MovieEntity
 import com.atakanmadanoglu.movieapp.data.service.remote.dto.MovieDto
-import javax.inject.Inject
 
-class MovieEntityMapper @Inject constructor() {
+class MovieEntityMapper {
     private fun mapToMovieEntity(
         movieDto: MovieDto,
         query: String

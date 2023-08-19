@@ -1,15 +1,26 @@
 package com.atakanmadanoglu.movieapp
 
 import android.app.Application
-import com.atakanmadanoglu.movieapp.data.mapper.MovieUiMapper
-import com.atakanmadanoglu.movieapp.data.repository.MovieRepository
-import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
-import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
+import com.atakanmadanoglu.movieapp.di.dataModule
+import com.atakanmadanoglu.movieapp.di.databaseModule
+import com.atakanmadanoglu.movieapp.di.mapperModule
+import com.atakanmadanoglu.movieapp.di.serviceModule
+import com.atakanmadanoglu.movieapp.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
-@HiltAndroidApp
 class MovieApplication : Application() {
-    @Inject lateinit var movieRepository: MovieRepository
-    @Inject lateinit var service: MovieService
-    @Inject lateinit var uiMapper: MovieUiMapper
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidContext(this@MovieApplication)
+            modules(
+                serviceModule,
+                databaseModule,
+                viewModelModule,
+                dataModule,
+                mapperModule
+            )
+        }
+    }
 }

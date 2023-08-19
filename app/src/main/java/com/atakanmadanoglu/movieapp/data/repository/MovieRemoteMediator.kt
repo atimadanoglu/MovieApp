@@ -13,10 +13,9 @@ import com.atakanmadanoglu.movieapp.data.service.local.entity.RemoteKeyEntity
 import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
 import okio.IOException
 import retrofit2.HttpException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class MovieRemoteMediator @Inject constructor(
+class MovieRemoteMediator(
     private val query: String,
     private val movieService: MovieService,
     private val movieDatabase: MovieDatabase,

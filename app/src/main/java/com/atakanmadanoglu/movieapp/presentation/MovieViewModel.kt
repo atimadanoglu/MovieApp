@@ -1,26 +1,19 @@
 package com.atakanmadanoglu.movieapp.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.cachedIn
-import com.atakanmadanoglu.movieapp.MovieApplication
 import com.atakanmadanoglu.movieapp.data.repository.MovieRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 data class SearchMovieUiState(
     val searchQuery: String = "samurai",
     val retrieveNewData: Boolean = false
 )
 
-@HiltViewModel
-class MovieViewModel @Inject constructor(
+class MovieViewModel(
     private val movieRepository: MovieRepository
 ): ViewModel() {
 
@@ -60,7 +53,7 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    companion object {
+   /* companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(
@@ -76,5 +69,5 @@ class MovieViewModel @Inject constructor(
                 ) as T
             }
         }
-    }
+    }*/
 }

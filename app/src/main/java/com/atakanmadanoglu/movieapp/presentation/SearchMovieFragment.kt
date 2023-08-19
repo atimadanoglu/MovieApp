@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.atakanmadanoglu.movieapp.databinding.FragmentSearchMovieBinding
 import com.atakanmadanoglu.movieapp.presentation.adapter.SearchedMovieAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchMovieFragment : Fragment() {
     private var _binding: FragmentSearchMovieBinding? = null
     private val binding get() = _binding!!
     private lateinit var searchedMovieAdapter: SearchedMovieAdapter
-    private val viewModel: MovieViewModel by viewModels { MovieViewModel.Factory }
+    private val viewModel by viewModel<MovieViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -60,6 +60,7 @@ dependencies {
     val retrofitVersion = "2.9.0"
     val okhttpVersion = "4.10.0"
     val activityVersion = "1.7.2"
+    val koinAndroidVersion = "3.4.3"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -108,6 +109,15 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+
+    // Koin
+    implementation ("io.insert-koin:koin-android:$koinAndroidVersion")
+    // Koin Test features
+    testImplementation ("io.insert-koin:koin-test:$koinAndroidVersion")
+    // Koin for JUnit 4
+    testImplementation ("io.insert-koin:koin-test-junit4:$koinAndroidVersion")
+    // Navigation Graph
+    implementation ("io.insert-koin:koin-androidx-navigation:$koinAndroidVersion")
 }
 
 kapt {

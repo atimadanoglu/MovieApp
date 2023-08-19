@@ -3,13 +3,12 @@ package com.atakanmadanoglu.movieapp.data.mapper
 import com.atakanmadanoglu.movieapp.data.service.local.entity.MovieEntity
 import com.atakanmadanoglu.movieapp.data.service.remote.dto.MovieDto
 import com.atakanmadanoglu.movieapp.presentation.model.MovieUI
-import javax.inject.Inject
 
-class MovieUiMapper @Inject constructor() {
+class MovieUiMapper {
     fun entityToMovieUi(
         movieEntity: MovieEntity
-    ): com.atakanmadanoglu.movieapp.presentation.model.MovieUI = with(movieEntity) {
-        com.atakanmadanoglu.movieapp.presentation.model.MovieUI(
+    ): MovieUI = with(movieEntity) {
+        MovieUI(
             adult = adult,
             id = id,
             originalLanguage = originalLanguage,

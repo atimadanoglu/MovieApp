@@ -7,9 +7,8 @@ import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
 import com.atakanmadanoglu.movieapp.presentation.model.MovieUI
 import okio.IOException
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class MoviePagingSource @Inject constructor(
+class MoviePagingSource(
     private val service: MovieService,
     private val uiMapper: MovieUiMapper,
     val query: String
