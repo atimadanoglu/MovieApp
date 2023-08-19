@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -18,6 +19,14 @@ object NetworkModule {
     private const val BASE_URL = "https://api.themoviedb.org/3/"
     private const val AUTHORIZATION_HEADER = "Bearer ${BuildConfig.API_KEY}"
     private const val ACCEPT_HEADER = "application/json"
+
+    @Provides
+    @Singleton
+    fun getHttpLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
     @Provides
     @Singleton
     fun provideRetrofit(
@@ -30,7 +39,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun getOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    fun getOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(httpLoggingInterceptor)
         .addInterceptor { chain ->
             val request: Request = chain.request().newBuilder()
                 .addHeader("accept", ACCEPT_HEADER)

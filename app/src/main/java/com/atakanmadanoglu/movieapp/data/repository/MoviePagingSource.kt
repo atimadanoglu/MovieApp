@@ -22,17 +22,16 @@ class MoviePagingSource @Inject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieUI> {
+        println("çağrıldı")
         return try {
             val page = params.key ?: 1
-            val response = service.getMoviesByQuery(
-                query, page = page
-            )
-            val prevKey = if (page == 1) null else (page - 1)
-            val nextKey = if (response.results.isEmpty()) null else (page + 1)
-
+            val response = service.getMoviesByQuery(query, page = page)
             val movieUiList = response.results.map {
                 uiMapper.dtoToMovieUi(it)
             }
+
+            val prevKey = if (page == 1) null else (page - 1)
+            val nextKey = if (movieUiList.isEmpty()) null else (page + 1)
 
             LoadResult.Page(
                 data = movieUiList,

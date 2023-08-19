@@ -11,8 +11,6 @@ import com.atakanmadanoglu.movieapp.data.service.local.MovieDatabase
 import com.atakanmadanoglu.movieapp.data.service.local.entity.MovieEntity
 import com.atakanmadanoglu.movieapp.data.service.local.entity.RemoteKeyEntity
 import com.atakanmadanoglu.movieapp.data.service.remote.MovieService
-import com.atakanmadanoglu.movieapp.data.service.remote.dto.MovieDto
-import com.atakanmadanoglu.movieapp.presentation.model.MovieUI
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -22,6 +20,7 @@ class MovieRemoteMediator @Inject constructor(
     private val query: String,
     private val movieService: MovieService,
     private val movieDatabase: MovieDatabase,
+    private val uiMapper: MovieUiMapper,
     private val entityMapper: MovieEntityMapper
 ): RemoteMediator<Int, MovieEntity>() {
     private val movieDao = movieDatabase.movieDao
@@ -36,11 +35,13 @@ class MovieRemoteMediator @Inject constructor(
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
+                println("refresh")
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: 1
             }
 
             LoadType.PREPEND -> {
+                println("prepend")
                 val remoteKeys = getFirstRemoteKey(state)
                 val prevKey = remoteKeys?.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
@@ -48,6 +49,7 @@ class MovieRemoteMediator @Inject constructor(
             }
 
             LoadType.APPEND -> {
+                println("append")
                 val remoteKeys = getLastRemoteKey(state)
                 val nextKey = remoteKeys?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
@@ -55,37 +57,37 @@ class MovieRemoteMediator @Inject constructor(
             }
         }
         try {
+            state.pages
+            val response = movieService.getMoviesByQuery(
+                query = query, page = page
+            )
 
-            if (query.length > 2) {
-                val response = movieService.getMoviesByQuery(
-                    query = query, page = page
-                )
+            val movieUiList = response.results.map {
+                uiMapper.dtoToMovieUi(it)
+            }
+            val movieEntityList = response.results.let {
+                entityMapper.mapToMovieEntityList(it, query)
+            }
 
-                val movieEntityList = entityMapper
-                    .mapToMovieEntityList(response.results, query)
-                val endOfPaginationReached = movieEntityList.isEmpty()
+            val endOfPaginationReached = movieEntityList.isEmpty()
 
-                val prevKey = if (page == 1) null else (page - 1)
-                val nextKey = if (endOfPaginationReached) null  else (page + 1)
+            val prevKey = if (page == 1) null else (page - 1)
+            val nextKey = if (endOfPaginationReached) null  else (page + 1)
 
-                val keys = movieEntityList.map {
-                    RemoteKeyEntity(it.id, prevKey, nextKey)
+            val keys = movieEntityList.map {
+                RemoteKeyEntity(it.id, prevKey, nextKey)
+            }
+
+            movieDatabase.withTransaction {
+                if (loadType == LoadType.REFRESH) {
+                    remoteKeyDao.clearRemoteKeys()
+                    movieDao.deleteAll()
                 }
-
-                movieDatabase.withTransaction {
-                    if (loadType == LoadType.REFRESH) {
-                        remoteKeyDao.clearRemoteKeys()
-                        movieDao.deleteAll()
-                    }
-                    remoteKeyDao.insertAll(keys)
-                    movieDao.upsertMovies(movieEntityList)
-                }
-                return MediatorResult.Success(
-                    endOfPaginationReached = (nextKey == null)
-                )
+                keys?.let { remoteKeyDao.insertAll(it) }
+                movieEntityList?.let { movieDao.upsertMovies(it) }
             }
             return MediatorResult.Success(
-                endOfPaginationReached = true
+                endOfPaginationReached = endOfPaginationReached
             )
         } catch (e: IOException) {
             return MediatorResult.Error(e)

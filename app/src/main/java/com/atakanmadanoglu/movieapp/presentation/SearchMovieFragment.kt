@@ -1,16 +1,15 @@
 package com.atakanmadanoglu.movieapp.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.atakanmadanoglu.movieapp.databinding.FragmentSearchMovieBinding
 import com.atakanmadanoglu.movieapp.presentation.adapter.SearchedMovieAdapter
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -41,12 +40,9 @@ class SearchMovieFragment : Fragment() {
                 if (query != null) {
                     viewModel.setSearchQuery(query)
                 }
-                if (viewModel.uiState.value.searchQuery.length > 2) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        viewModel.pager.collectLatest {
-                            searchedMovieAdapter.submitData(it)
-                        }
-                    }
+                viewModel.setRetrieveNewData()
+                if (viewModel.uiState.value.retrieveNewData) {
+                    searchedMovieAdapter.refresh()
                 }
                 return true
             }
@@ -55,12 +51,9 @@ class SearchMovieFragment : Fragment() {
                 if (newText != null) {
                     viewModel.setSearchQuery(newText)
                 }
-                if (viewModel.uiState.value.searchQuery.length > 2) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        viewModel.pager.collectLatest {
-                            searchedMovieAdapter.submitData(it)
-                        }
-                    }
+                viewModel.setRetrieveNewData()
+                if (viewModel.uiState.value.retrieveNewData) {
+                    searchedMovieAdapter.refresh()
                 }
                 return true
             }
